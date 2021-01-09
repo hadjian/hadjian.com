@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <!-- mobile devices sometimes display a zoomed viewport per default,
+      which breaks responsive layouts.  The next line prevents this and
+      forces a zoom of 100%.-->
+      <meta name="viewport" content="width=device-width,initial-scale=1">      
+      <title>Pedram Hadjian's Blog</title>
+      <link href="../styles/style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+      <header>
+          <h1>Pedram Hadjian's Blog</h1>
+          <nav>
+              <ul>
+                  <li>
+                      <a href="../index.html">blog</a>                      
+                  </li>
+                  <li>
+                      <a href="https://github.com/hadjian"> github</a>
+                  </li>
+                  <li>
+                      <a href="../about.html"> about </a>
+                  </li>
+              </ul>
+          </nav>
+      </header>
+      <main>
+          <section>
+              <h2>My Blog Setup</h2>
+              <p>2021-01-09</p>
+              
+              <h3>Motivation</h3>
+              <p>
+                  Hello Internet! This is the first entry of my blog. I
+                  am a software engineer working for Siemens Technology
+                  in Germany. I mostly work on IoT related projects in
+                  different industrial branches like smart
+                  infrastructure, manufacturing, energy, healthcare
+                  etc. You can find out more about me on my
+                  <a href="../about.html">about</a> page.
+              </p>
+
+              <p>
+                  I mostly do backend stuff with golang in my
+                  professional life and feel comfortable automating
+                  stuff with Linux. Nowadays it's almost impossible to
+                  evade web technology, as most desktop applications
+                  have disappeared.
+              </p>
+
+              <p>
+                  While the upper layers like JavaScript frameworks make
+                  me run away, there is still a lot of interesting tech
+                  involved, which I'd like to learn about. A great
+                  colleague and web-wizard pointed me to
+                  <a href="https://mzl.la/35lm3ts">Mozilla Web Docs</a>,
+                  which struck me as one of the most beautifully written
+                  piece of technical documentation ever conceived.
+              </p>
+
+              <p>
+                  As nobody has ever learned anything, without getting
+                  their hands dirty, I decided to hand-write HTML / CSS
+                  for this blog, to see how far this approach can take
+                  me (probably not that far, as the plethora of static
+                  site generators, CSS frameworks and worry-free hosting
+                  providers don't exist for nothing).
+              </p>
+
+              <h3>Domain and Web Server</h3>
+              <p>
+                  I reserved www.hadjian.com and www.hadjian.de ages ago
+                  from a German hosting provider and never cared to put
+                  something up. I was able to SSH into the server and
+                  checked the settings of <code>sshd_config</code>. To
+                  my surprise, all users including <code>root</code> were
+                  allowed to login via password! Can you spell
+                  d-i-c-t-i-o-n-a-r-y a-t-t-a-c-k?
+              </p>
+              <p>
+                  Since this is the internet we're talking about, I
+                  checked the frequency of login attempts by hackers or
+                  script kiddies (see output below, snipped for sanity).
+              </p>
+              <div class=source>
+                  <pre>
+                      <code>
+<b>hadjian@hadjian.com:~$ sudo lastb</b>
+
+-- snip --
+root     ssh:notty    222.187.224.30   Fri Jan  1 04:23 - 04:23  (00:00)
+root     ssh:notty    222.187.224.30   Fri Jan  1 04:23 - 04:23  (00:00)
+ubuntu   ssh:notty    196.27.127.61    Fri Jan  1 04:22 - 04:22  (00:00)
+gary     ssh:notty    175.123.253.79   Fri Jan  1 04:22 - 04:22  (00:00)
+ubuntu   ssh:notty    196.27.127.61    Fri Jan  1 04:22 - 04:22  (00:00)
+<b>gary</b>     ssh:notty    175.123.253.79   Fri Jan  1 04:22 - 04:22  (00:00)
+root     ssh:notty    135.ip-51-83-128 Fri Jan  1 04:22 - 04:22  (00:00)
+redmine  ssh:notty    101.33.123.210   Fri Jan  1 04:22 - 04:22  (00:00)
+redmine  ssh:notty    101.33.123.210   Fri Jan  1 04:22 - 04:22  (00:00)
+indra    ssh:notty    vps-8ee9d389.vps Fri Jan  1 04:21 - 04:21  (00:00)
+indra    ssh:notty    vps-8ee9d389.vps Fri Jan  1 04:21 - 04:21  (00:00)
+oracle   ssh:notty    196.27.127.61    Fri Jan  1 04:21 - 04:21  (00:00)
+oracle   ssh:notty    196.27.127.61    Fri Jan  1 04:21 - 04:21  (00:00)
+cmsadmin ssh:notty    122.155.174.36   Fri Jan  1 04:21 - 04:21  (00:00)
+cmsadmin ssh:notty    122.155.174.36   Fri Jan  1 04:21 - 04:21  (00:00)
+tmp      ssh:notty    49.235.104.204   Fri Jan  1 04:20 - 04:20  (00:00)
+tmp      ssh:notty    49.235.104.204   Fri Jan  1 04:20 - 04:20  (00:00)
+bot      ssh:notty    196.27.127.61    Fri Jan  1 04:20 - 04:20  (00:00)
+-- snip --
+                      </code>
+                  </pre>
+              </div>
+              <p>
+                  Who is <b>gary</b> and why was he trying to break into
+                  my server? Luckily <code>lastb</code> shows
+                  failed attempts. When I ran <code>last</code> it only
+                  showed my own logins, although a good hacker would
+                  have wiped that probably. So roughly 5-6 attempts per
+                  minute. Hmmm...
+              </p>
+              <h3>Adding (slightly more) Security</h3>
+              <p>
+                  First things first:
+              </p>
+              <div class=source>
+                  <pre>
+                      <code>
+<b>hadjian@hadjian.com:~$ sudo apt update</b>
+<b>hadjian@hadjian.com:~$ sudo apt upgrade</b>
+                      </code>
+                  </pre>
+              </div>
+              <p>
+                  After updating all the packages, I modified <code>/etc/ssh/sshd_conf</code> to
+
+                  <ul>
+                      <li>dissallow root login,</li>
+                      <li>only allow a specific group to login and</li>
+                      <li>only allow key-based login / disabling password login</li>
+                  </ul>
+              </p>
+              <p>
+                  Before that, I added my user to the login group,
+                  created an SSH key with <code>ssh-keygen</code> on my
+                  local machine and copied over the public key to
+                  <code>~/.ssh/authorized_keys</code>. Then I restarted
+                  <code>sshd</code>. Now I should be the only one being
+                  able to login.
+              </p>
+              <p>
+                  Next, I checked running processes:
+              </p>
+              <div class="source">
+                  <pre>
+                      <code>
+hadjian@s18186989:~$ sudo ps ax
+  PID TTY      STAT   TIME COMMAND
+    1 ?        Ss     3:34 init
+    2 ?        S      0:00 [kthreadd/800044]
+    3 ?        S      0:00 [khelper/8000447]
+  311 ?        Ssl   12:03 rsyslogd
+  316 ?        Ss     0:00 dbus-daemon --system --fork
+  323 ?        Ss     0:00 /lib/systemd/systemd-logind
+  508 ?        Ss     0:00 /usr/sbin/xinetd -dontfork -pidfile /var/run/xinetd.pid -stayalive -inetd_com
+  522 ?        Ss     0:14 cron
+  746 ?        Ss     0:00 /usr/sbin/saslauthd -a pam -c -m /var/run/saslauthd -n 2
+  748 ?        S      0:00 /usr/sbin/saslauthd -a pam -c -m /var/run/saslauthd -n 2
+  777 tty1     Ss+    0:00 /sbin/getty 38400 console
+  780 tty2     Ss+    0:00 /sbin/getty 38400 tty2
+ 5028 ?        Ss     0:00 /usr/sbin/sshd -D
+ 5244 ?        Ss     0:00 nginx: master process /usr/sbin/nginx
+ 5245 ?        S      0:18 nginx: worker process
+ 5246 ?        S      0:18 nginx: worker process
+ 5247 ?        S      0:18 nginx: worker process
+ 5248 ?        S      0:00 nginx: worker process
+ 5953 ?        Ss     0:00 sshd: hadjian [priv]
+ 5964 ?        S      0:00 sshd: hadjian@pts/1
+ 5965 pts/1    Ss+    0:00 -bash
+ 6010 ?        Ss     0:00 sshd: hadjian [priv]
+ 6021 ?        S      0:00 sshd: hadjian@pts/3
+ 6022 pts/3    Ss+    0:00 -bash
+ 6044 ?        Ss     0:00 sshd: hadjian [priv]
+ 6055 ?        S      0:00 sshd: hadjian@pts/4
+ 6056 pts/4    Ss     0:00 -bash
+ 6620 pts/4    S+     0:00 sudo ps ax
+ 6621 pts/4    R+     0:00 ps ax
+20253 ?        S      0:00 upstart-file-bridge --daemon
+20257 ?        S      0:00 upstart-socket-bridge --daemon
+28952 ?        S      0:00 upstart-udev-bridge --daemon
+28955 ?        Ss     0:00 /lib/systemd/systemd-udevd --daemon
+29575 ?        Ssl    0:00 /usr/sbin/named -u bind
+                      </code>
+                  </pre>
+              </div>
+              <p>
+                  Nothing worrying to my understanding, excpet maybe the
+                  <code>xinted</code> and <code>saslauthd</code> daemons.
+              </p>
+              <p>
+                  Why is that installed? <code>xinetd</code> is a
+                  super-server, which invokes others, in case their port
+                  is connected to. Trying to deinstall it should list
+                  dependent packages and tell me, if there is something
+                  I might need. It didn't list anything dependent, so I
+                  deleted it.
+              </p>
+              <p>
+                  <code>saslauthd</code> had some dependencies however,
+                  which don't seem necessary for my purposes:
+              </p>
+              <div class="source">
+                  <pre>
+                      <code>
+<b>hadjian@s18186989:~$ apt-cache rdepends sasl2-bin</b>
+sasl2-bin
+Reverse Depends:
+  sendmail-bin
+  qpidd
+  postfix
+  sasl2-bin:i386
+  sendmail-bin
+  rinputd
+  qpidd
+  libapache2-mod-authn-sasl
+  cyrus-common-2.4
+  cyrus-admin-2.4
+  postfix
+                      </code>
+                  </pre>
+              </div>
+              <p>
+                  I was not going to use my webserver as a mailserver
+                  and all of those packages have to do with mail. Also I
+                  was going to use nginx instead of apache, so all of
+                  that could go away, if it was installed. Now I have a
+                  list of running processes, I am familiar with and
+                  which are required for webserver operations.
+              </p>
+              <p>
+                  Now to the open ports:
+              </p>
+              <div class="source">
+                  <pre>
+                      <code>
+<b>hadjian@s18186989:~$ sudo netstat -tulpn</b>
+[sudo] password for hadjian: 
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      5244/nginx      
+tcp        0      0 217.160.178.169:53      0.0.0.0:*               LISTEN      29575/named     
+tcp        0      0 127.0.0.1:53            0.0.0.0:*               LISTEN      29575/named     
+tcp        0      0 0.0.0.0:3223            0.0.0.0:*               LISTEN      5028/sshd       
+tcp        0      0 127.0.0.1:953           0.0.0.0:*               LISTEN      29575/named     
+tcp6       0      0 :::80                   :::*                    LISTEN      5244/nginx      
+tcp6       0      0 :::53                   :::*                    LISTEN      29575/named     
+tcp6       0      0 :::3223                 :::*                    LISTEN      5028/sshd       
+tcp6       0      0 ::1:953                 :::*                    LISTEN      29575/named     
+udp        0      0 217.160.178.169:53      0.0.0.0:*                           29575/named     
+udp        0      0 127.0.0.1:53            0.0.0.0:*                           29575/named     
+udp6       0      0 :::53                   :::*                                29575/named     
+                      </code>
+                  </pre>
+              </div>
+              <p>
+                  SSH, nginx and named have ports open, which seems
+                  ok. With the minimum of proccesses running, a minimum
+                  of ports open and a secure way to login, I think I can
+                  proceed to actually putting content on the site.
+              </p>
+              <h3>Hand-Crafted HTML/CSS</h3>
+              <p>
+                  Nowadays it probably doesn't make sense to run your
+                  own server and hand-write HTML / CSS. We have medium,
+                  worpress and similar things and even going one level
+                  below the convenience layer, you'd probably use
+                  bootstrap and deploy to github pages, Heroku or AWS
+                  S3.
+              </p>
+              <p>
+                  I wanted to write at least one web-site the most
+                  ancient way available, to see how much the browser can
+                  do nowadays. So let's get started.
+              </p>
+              <p>
+                  The Blogs that I frequently read are more informative
+                  and less design-focused. I wanted to follow that
+                  strategy and compared some of my frequents:
+              </p>
+              <ul>
+                  <li><a href="https://randomascii.wordpress.com">randomascii</a></li>
+                  <li><a href="https://prideout.net">prideout.net</a></li>
+                  <li><a href="https://danluu.com">danluu.com</a></li>
+                  <li><a href="https://drewdevault.com">drewdevault.com</a></li>
+                  <li><a href="https://fabiensanglard.net/">fabiensanglard.net</a></li>
+              </ul>
+              <p>
+                  Looks simple: a header with the name of the website, a
+                  small navbar with links to "blog", "github" and
+                  "about". The first one linked to the landing page itself
+                  and then a list of articles, to get straight to the
+                  point.
+              </p>
+              <p>
+                  So let's make a plan:
+                  <dl>
+                      <dt>Site Structure</dt>
+                      <dd>
+                          I wanted to launch as fast as possible, so I
+                          wouldn't get bored by the realities of
+                          side-projects. If you don't finish a
+                          side-project, it's as if you've never started
+                          it. So the bare minimum of a blog contains a
+                          landing page, an about page and at least one
+                          article. Something like the diagram below. I
+                          will even cheat and put my pdf CV up, so I
+                          don't have to design a web page for my CV.
+                      </dd>
+
+                      <dt>Page Structure</dt>
+                      <dd>Semantic Tags, Header, Footer, Impress</dd>
+
+                      <dt>Responsiveness</dt>
+                      <dd>Header, Article Roll</dd>
+
+                      <dt>Typography</dt>
+                      <dd>Fonts, Font Sizes</dd>
+
+                      <dt>Styling</dt>
+                      <dd>Header, Tagline, Article List, Source Code Listing</dd>
+                  </dl>
+
+              </p>
+              
+              
+          </section>
+
+          
+      </main>
+  </body>
+</html>
