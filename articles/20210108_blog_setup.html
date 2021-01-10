@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
       <meta charset="utf-8">
       <!-- mobile devices sometimes display a zoomed viewport per default,
@@ -27,10 +27,11 @@
           </nav>
       </header>
       <main>
-          <section>
+          <article>
               <h2>My Blog Setup</h2>
-              <p>2021-01-09</p>
-              
+              <p>
+                  <time datetime="2021-01-09">2021-01-09</time>
+              </p>
               <h3>Motivation</h3>
               <p>
                   Hello Internet! This is the first entry of my blog. I
@@ -298,43 +299,157 @@ udp6       0      0 :::53                   :::*                                
               <p>
                   Looks simple: a header with the name of the website, a
                   small navbar with links to "blog", "github" and
-                  "about". The first one linked to the landing page itself
-                  and then a list of articles, to get straight to the
-                  point.
+                  "about". The main area will contain list of articles
+                  previews, to get straight to the point.
               </p>
               <p>
                   So let's make a plan:
                   <dl>
                       <dt>Site Structure</dt>
                       <dd>
-                          I wanted to launch as fast as possible, so I
-                          wouldn't get bored by the realities of
-                          side-projects. If you don't finish a
-                          side-project, it's as if you've never started
-                          it. So the bare minimum of a blog contains a
-                          landing page, an about page and at least one
-                          article. Something like the diagram below. I
-                          will even cheat and put my pdf CV up, so I
-                          don't have to design a web page for my CV.
+                          A landing page with a list of articles and
+                          links to an "about"-page and my github
+                          page. The landing page will display a list of
+                          all articles. I will cheat and put my CV as
+                          pdf behind the "about"-link. It is written in
+                          LaTeX and I don't want to recreate it in HTML.
                       </dd>
 
                       <dt>Page Structure</dt>
-                      <dd>Semantic Tags, Header, Footer, Impress</dd>
+                      <dd>
+                          HTML5 introduced semantic tags, which are
+                          quite well defined if you write a
+                          text-document. So it was straigh-forward to
+                          use them in the creation of a blog.
 
-                      <dt>Responsiveness</dt>
-                      <dd>Header, Article Roll</dd>
+                          For the landing page, the <code>header</code>
+                          contains the <code>title</code> and
+                          <code>navbar</code>, while the <code>main</code>
+                          area contains merely a list of <code>article</code>
+                          elements like in the below figure.
 
-                      <dt>Typography</dt>
-                      <dd>Fonts, Font Sizes</dd>
+                          <figure aria-labelledby="structure-caption">
+                              <pre>
+ __________________________
+|                          |
+| < header>                |
+|   < h1>                  |
+|     < nav>               |
+|--------------------------|
+|                          |
+| < main>                  |
+|   < article>             |
+|   < article>             |
+|   < article>             |
+|                          |
+|--------------------------|
+|                          |
+| < footer>                |
+|                          |
+----------------------------
+                              </pre>
+                              <figcaption id="structure-capotion">
+                                  Simple ASCII art of the planned page
+                                  structure. From top to bottom there
+                                  will be a header box, a main box and a
+                                  footer box. Inside main, each article
+                                  preview will be surrounded by semantic
+                                  article tags.
+                              </figcaption>
+                          </figure>
+
+                          An actual blog entry will have the same
+                          structure, but only one article element.
+                      </dd>
 
                       <dt>Styling</dt>
-                      <dd>Header, Tagline, Article List, Source Code Listing</dd>
+                      <dd>
+                          CSS has become a joy to work with. I remember
+                          my first experiments a couple of years ago,
+                          where centering was hard! Now it is
+                          <code>margin: 0 auto;</code>
+                          I wanted to display the title and the navbar
+                          in one line, if there is enough space (see
+                          responsiveness below). This was also easily done using
+                          <code>display: flex</code>, aligning the links
+                          to the right with <code>justify-content: flex-end;</code>
+                          and exanding the title to take up the rest of
+                          the space, so the text can be left-aligned,
+                          while pushing the links to the right. This is
+                          done with <code>flex: 1 auto;</code>. The result:
+                          <figure>
+                              <img alt="A screenshot of the header, 
+                                        which contains the page title 
+                                        and the navbar in one line."
+                                   src="../images/responsive_small.png"/>
+                          </figure>
+                      </dd>
+
+                      <dt>Responsiveness</dt>
+                      <dd>
+                          <a href="https://mzl.la/38uv99n">Normal Flow</a> will
+                          already give me responsiveness for normal
+                          text. Also the header will behave nicely, when
+                          the browser is resized. However, if there is
+                          not enough space for all of the text, the
+                          title text will wrap with the following result:
+
+                          <figure>
+                              <img alt="Image displaying ugly wrapping of 
+                                        the title text in the navbar, if there
+                                        is not enough room for title and nav links."
+                                   src="../images/responsive_no_wrap.png"/>
+                          </figure>
+
+                          This happens if either the font-size is
+                          increased or the screen has not enough
+                          horizontal width. There is an easy built-in
+                          mitigation, by using <code>flex-wrap: wrap</code>
+                          on the navbar, which will allow the links to
+                          wrap to the next line.
+
+                          I will only add a tiny media query to center
+                          the title and navbar horizontally, once they
+                          display on two separate lines.
+
+                          The clever thing I learned from MDN is to make
+                          the query dependent on the number of charaters
+                          with <code>39em</code>, as centering will also
+                          happen if the text is zoomed and not only if
+                          the page width falls below a certain number of
+                          pixels. Final result:
+                          
+                          <figure>
+                              <img alt="Image displaying the header with
+                                         a centered title on one line and 
+                                         centered nav links on the next."
+                                   src="../images/responsive_wrap.png"/>
+                          </figure>
+
+                      </dd>
                   </dl>
 
+                  <h3>Wrapping Up</h3>
+
+                  <p>
+                      As a beginner I wrote the CSS without a specific
+                      approach, adding lines as I needed them. After the
+                      site behaved as I wanted it to do, I ran over the CSS
+                      once and deleted/rearranged to make it more
+                      sensible. But that is probably all the love that file
+                      will get. It was a hobby project anyways.
+                  </p>
+                  <p>
+                      I know that web-technology is quite forgiving, so
+                      I ran my pages through validators to see how much
+                      I got wrong on my first go.
+                  </p>
+                  
+                  <h3>Final </h3>
               </p>
               
               
-          </section>
+          </article>
 
           
       </main>

@@ -58,6 +58,7 @@ title for e.g. mobile screens or if the font is magnified too large.
  */
 header {
     position: sticky;
+    z-index: 7;
     background-color: var(--black);
     font-family: bangersregular, sans-serif;
     color: white;
@@ -71,26 +72,15 @@ header {
     padding-left: var(--text-margin);
 }
 
-@media screen and (max-width: 39em) {
-    header {
-        justify-content: center;
-    }
-
-    h1 {
-        text-align: center;
-    }
-}
-
-nav { 
-}
-
 nav ul {
     display: flex;
     padding: 0px;
     margin: 0px;
-    align-items: stretch;
     justify-content: flex-end;
     list-style: none;
+}
+
+nav { 
 }
 
 nav ul li {
@@ -100,6 +90,17 @@ nav ul li {
 nav a {
     font-size: 2.5rem;
     color: inherit;
+}
+
+
+@media screen and (max-width: 39em) {
+    header {
+        justify-content: center;
+    }
+
+    h1 {
+        text-align: center;
+    }
 }
 
 /* Typography */
@@ -137,10 +138,16 @@ h2 {
     padding-left: var(--text-margin);
     background-color: var(--black);
     color: white;
-
 }
 
-h2 + p {
+/* If h2 is part of the article, we still want it to cover the full
+   width, so we subtract the margin, we want for the body text */
+article h2 {
+    margin-right: calc(-1*var(--text-margin));
+    margin-left: calc(-1*var(--text-margin));    
+}
+
+time {
     font-style: italic;
 }
 
@@ -150,33 +157,33 @@ h3 {
     margin: 0px;
     width: 100%;
     padding: 0px;
-    padding-left: var(--text-margin);
 }
 
-div.card p {
-    margin-top: 0.3em;
-    margin-bottom: 0em;
-    line-height: 1.6;
-}
-
-div.articles {
-}
 
 div.card {
     display: flex;
-    padding-left: var(--text-margin);
-    padding-right: 1em;
-    padding-bottom: 1em;
     align-items: center;
-    margin-top: 1em;
-    margin-bottom: 0em;
-    border-bottom: 2px solid var(--black);
 }
 
+hr {
+    border: none;
+    border-top: 1px solid var(--black);
+    size: 2px;
+    color: black;
+    height: 5px;
+}
+
+img {
+    border: 1px solid black;
+    max-width: 100%;
+}
+
+
 div.card img {
+    border: none;
     height: 5em;
-    padding: 1em;
     padding-top: 0;
+    padding-right: var(--text-margin);
 }
 
 section p {
@@ -195,6 +202,11 @@ pre {
     background-color: var(--light-gray);
 }
 
+figcaption {
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
 code {
     background-color: var(--light-gray);
 }
@@ -202,3 +214,10 @@ code {
 dt {
     font-weight: bold;
 }
+
+article {
+    position: relative;
+    padding-left: var(--text-margin);
+    padding-right: var(--text-margin);
+}
+
