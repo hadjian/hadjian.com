@@ -56,7 +56,7 @@ height and text should align at the bottom.
 If the title is about to line wrap, we'll shift the links below the
 title for e.g. mobile screens or if the font is magnified too large.
  */
-header {
+header, footer {
     position: sticky;
     z-index: 7;
     background-color: var(--black);
@@ -70,6 +70,10 @@ header {
     remaining space */
     align-items: flex-end;
     padding-left: var(--text-margin);
+}
+
+footer {
+    height: 4rem;
 }
 
 nav ul {
@@ -220,4 +224,3 @@ article {
     padding-left: var(--text-margin);
     padding-right: var(--text-margin);
 }
-

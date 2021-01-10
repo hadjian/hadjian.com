@@ -135,13 +135,12 @@ bot      ssh:notty    196.27.127.61    Fri Jan  1 04:20 - 04:20  (00:00)
               </div>
               <p>
                   After updating all the packages, I modified <code>/etc/ssh/sshd_conf</code> to
-
-                  <ul>
-                      <li>dissallow root login,</li>
-                      <li>only allow a specific group to login and</li>
-                      <li>only allow key-based login / disabling password login</li>
-                  </ul>
               </p>
+              <ul>
+                  <li>dissallow root login,</li>
+                  <li>only allow a specific group to login and</li>
+                  <li>only allow key-based login / disabling password login</li>
+              </ul>
               <p>
                   Before that, I added my user to the login group,
                   created an SSH key with <code>ssh-keygen</code> on my
@@ -332,23 +331,23 @@ udp6       0      0 :::53                   :::*                                
                               <pre>
  __________________________
 |                          |
-| < header>                |
-|   < h1>                  |
-|     < nav>               |
+| &lt; header&gt;                |
+|   &lt; h1&gt;                  |
+|     &lt; nav&gt;               |
 |--------------------------|
 |                          |
-| < main>                  |
-|   < article>             |
-|   < article>             |
-|   < article>             |
+| &lt; main&gt;                  |
+|   &lt; article&gt;             |
+|   &lt; article&gt;             |
+|   &lt; article&gt;             |
 |                          |
 |--------------------------|
 |                          |
-| < footer>                |
+| &lt; footer&gt;                |
 |                          |
 ----------------------------
                               </pre>
-                              <figcaption id="structure-capotion">
+                              <figcaption id="structure-caption">
                                   Simple ASCII art of the planned page
                                   structure. From top to bottom there
                                   will be a header box, a main box and a
@@ -442,16 +441,53 @@ udp6       0      0 :::53                   :::*                                
                   <p>
                       I know that web-technology is quite forgiving, so
                       I ran my pages through validators to see how much
-                      I got wrong on my first go.
+                      I got wrong on my first go. It wasn't all that bad:
+
+                      <figure>
+                          <img alt="Image displaying the three errors from 
+                                    validating this blog entry."
+                               src="../images/html_validation.png"/>
+                      </figure>
+
+                      After fixing those tiny errors, I would quickly
+                      check how large my page size has become. I checked
+                      this on the browser network tab by reloading the
+                      page and as expected it was with 280 KiB quite
+                      tiny, so no need for minifying anything.
+
+                      Also I tried the worst throttling ("Slow 3G") and
+                      the page loaded in 11.27 seconds. Great!                   
                   </p>
                   
-                  <h3>Final </h3>
-              </p>
-              
-              
-          </article>
+                  <h3>Final Thoughts </h3>
+                  <p>
+                      The best thing about this project is, that I
+                      finally have a blog, where I can do write-ups of
+                      the projects I spend a lot of time on.
+                  </p>
+                  <p>
+                      I did understand lots from following the MDN
+                      tutorials and now at least know what "normal
+                      flow", "block elements" and "inline elements" are
+                      and much much more, so I got my moneys worth of
+                      education out of it.
+                  </p>
+                  <p>
+                      As always, if you really finish a small project,
+                      it takes multiple the amount of time you'd thought
+                      it would take, so even in private it is important
+                      to scope any project to the bare minimum.
+                  </p>
+                  <p>
+                      Thanks for reading! Feedback is welcome at
+                      <address>
+                          pedram.hadjian@gmail.com
+                      </address>
+                  </p>
 
-          
+          </article>
       </main>
+      <footer>
+      </footer>
   </body>
 </html>
