@@ -167,6 +167,23 @@ h3 {
 div.card {
     display: flex;
     align-items: center;
+    padding-bottom: 2em;
+}
+
+div.card div.teaser {
+    width: 85%;
+    padding-left: var(--text-margin);
+}
+
+div.card div.imgcontainer {
+    width: 15%;
+}
+
+
+div.card div.imgcontainer img {
+    border: none;
+    padding-top: 0;
+    padding-right: var(--text-margin);
 }
 
 hr {
@@ -182,12 +199,11 @@ img {
     max-width: 100%;
 }
 
-
-div.card img {
+img.diagram {
+    display: block;
+    margin: auto;
     border: none;
-    height: 5em;
-    padding-top: 0;
-    padding-right: var(--text-margin);
+    align: center;
 }
 
 section p {

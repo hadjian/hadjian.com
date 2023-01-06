@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <!-- mobile devices sometimes display a zoomed viewport per default,
+        which breaks responsive layouts.  The next line prevents this and
+        forces a zoom of 100%.-->
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Pedram Hadjian's Blog</title>
+        <link href="../styles/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+      <header>
+          <h1>Pedram Hadjian's Blog</h1>
+          <nav>
+              <ul>
+                  <li>
+                      <a href="../index.html">blog</a>                      
+                  </li>
+                  <li>
+                      <a href="https://github.com/hadjian"> github</a>
+                  </li>
+                  <li>
+                      <a href="../about.html"> about </a>
+                  </li>
+              </ul>
+          </nav>
+      </header>
+      <main>
+          <article>
+              <h2>Two's Complement and negative Numbers</h2>
+              <p>
+                  <time datetime="2022-12-29">2022-12-29</time>
+              </p>
+              <h3>Introduction</h3>
+              <p>
+                  I am in the progress of reading the excellent book
+                  <a href="https://www.charlespetzold.com/books/">Code: The Hidden Language of Computer Hardware and Software</a>. The
+                  book walks you through the chronology of inventions
+                  that made the computer possible. One chapter is
+                  dedicated to number representation and arithmentic,
+                  which is where the two's complement is naturally
+                  explained.
+              </p>
+              <p>
+                  This is where I realized that I knew the "how it
+                  works", but not the "why it works". The explanation in
+                  the book didn't get through to me, either. As I had to
+                  piece together the information and couldn't find a
+                  source, which did the job for me, I decided to write
+                  it down in this article.
+              </p>
+              <h3>What Problem are we solving?</h3>
+              <p>
+                  Imagine you already know how to build a machinery,
+                  which can add two positive numbers. It doesn't matter
+                  whether you use transistors, tubes, relays or
+                  gears. Just something that "mechanically" takes two
+                  positive numbers and outputs the result. Like this black box:
+
+              </p>
+              <p>
+                  <img class="diagram" alt="black box adder" src="../images/black-box-adder.svg"/>              
+              </p>
+              <p>
+                  To visualize the operation of an adder machinery, we
+                  can look at the number line of whole numbers (natural
+                  numbers plus 0). The first operand, which is "4" in
+                  our example above, may be seen as the starting point
+                  and the second operand, which is "3" in the same
+                  example, may be seen as movement into the direction of
+                  increasing numbers:
+              </p>
+              <p>
+                  <img class="diagram" alt="addition on the number line" src="../images/addition-on-number-line.svg"/>
+              </p>
+              <p>
+                  Now the goal is to modify this machinary to enable
+                  subtraction and not only addition. Using the two's
+                  complement achieves this. How this works will be
+                  explained in the remainder of this article.
+              </p>              
+              <h3>The Complement Method</h3>              
+              <p>
+                  Observe a limitation of any real-world adder
+                  machinery: the number of digits accepted as input and
+                  produced as output are limited. In our simple example
+                  above, this limit is one digit. The numbers are
+                  represented in the decimal system for now, so the
+                  digits 0-9 are accepted and produced.
+              </p>
+              <p>
+                  But even when adding two single digits, the result may
+                  have two digits as in <math>8+7=15</math>. But since
+                  the output was wired to only have one digit, the
+                  result will be <math>8+7=5</math>. The carry digit is
+                  simply discarded, because it has no place to go. The
+                  machinery will signal this overflow on a dedicated
+                  output.
+              </p>
+              <p>
+                  <img class="diagram" alt="adder with discarded output" src="../images/adder-carry-discard.svg"/>
+              </p>
+              <p>
+                  Visualizing this again on our number line, if an
+                  addition crosses 9 in our decimal representation, we
+                  will wrap around to 0:
+              </p>
+              <p>
+                  <img class="diagram" alt="addition with wrap-around on the number line" src="../images/wrap-around-number-line.svg"/>
+              </p>
+              <p>
+                  We will turn the line into a circle, as it makes the
+                  wrap-around more apparent:
+              </p>
+              <p>
+                  <img class="diagram" alt="a number circle" src="../images/number-circle.svg"/>
+              </p>
+    </body>
+</html>
