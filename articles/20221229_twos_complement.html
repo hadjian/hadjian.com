@@ -1,12 +1,21 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DQERDW14Q3"></script>
+        <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-DQERDW14Q3');
+        </script>        
         <meta charset="UTF-8"/>
         <!-- mobile devices sometimes display a zoomed viewport per default,
         which breaks responsive layouts.  The next line prevents this and
         forces a zoom of 100%.-->
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Pedram Hadjian's Blog</title>
+        <title>Two's Complement and negative Numbers</title>
         <link href="../styles/style.css" rel="stylesheet" type="text/css">
     </head>
     <body>
@@ -44,7 +53,7 @@
               </p>
               <p>
                   This is where I realized that I knew the "how it
-                  works", but not the "why it works". The explanation in
+                  lkj works", but not the "why it works". The explanation in
                   the book didn't get through to me, either. As I had to
                   piece together the information and couldn't find a
                   source, which did the job for me, I decided to write
@@ -77,44 +86,705 @@
               <p>
                   Now the goal is to modify this machinary to enable
                   subtraction and not only addition. Using the two's
-                  complement achieves this. How this works will be
+                  complement achieves this, by actually turning
+                  subtraction into addition. How this works will be
                   explained in the remainder of this article.
               </p>              
-              <h3>The Complement Method</h3>              
+              <h3>Wrapping Around</h3>
               <p>
-                  Observe a limitation of any real-world adder
+                  In terms of our number line we can only move into the
+                  direction of increasing numbers using our adder
+                  machinery. Subtraction in this analogy is moving into
+                  the opposite direction. Let's walk through the steps
+                  to achieve this.
+              </p>
+              <p>
+                  For this, observe a limitation of any real-world adder
                   machinery: the number of digits accepted as input and
-                  produced as output are limited. In our simple example
-                  above, this limit is one digit. The numbers are
-                  represented in the decimal system for now, so the
-                  digits 0-9 are accepted and produced.
+                  produced as output are limited, because its a physical
+                  thing, which cannot accept or output unbounded
+                  values. In our simple example above this limit is one
+                  digit. The numbers are represented in the decimal
+                  system for now, so the digits 0-9 are accepted and
+                  produced.
               </p>
               <p>
                   But even when adding two single digits, the result may
-                  have two digits as in <math>8+7=15</math>. But since
-                  the output was wired to only have one digit, the
-                  result will be <math>8+7=5</math>. The carry digit is
-                  simply discarded, because it has no place to go. The
-                  machinery will signal this overflow on a dedicated
-                  output.
+                  have two digits as in 8+3=11. But since the output was
+                  wired to only have one digit, the result will be
+                  8+3=1. The carry digit is simply discarded, because it
+                  has no place to go. The machinery will signal this
+                  overflow on a dedicated output.
               </p>
               <p>
                   <img class="diagram" alt="adder with discarded output" src="../images/adder-carry-discard.svg"/>
               </p>
               <p>
-                  Visualizing this again on our number line, if an
-                  addition crosses 9 in our decimal representation, we
-                  will wrap around to 0:
+                  So if we keep adding one to our result and we cross 9,
+                  we will in a sense wrap around to 0, then 1, then 2
+                  etc. The key observation to make here now is that with
+                  such a limitation, when we add 3 to 8 we arrive at the
+                  same number as if we had subtracted 7 from 8. Let's
+                  visualize this on our number line:
               </p>
               <p>
                   <img class="diagram" alt="addition with wrap-around on the number line" src="../images/wrap-around-number-line.svg"/>
               </p>
               <p>
-                  We will turn the line into a circle, as it makes the
-                  wrap-around more apparent:
+                  Now there seems to be a way to turn a subtraction into
+                  an addition, which arrives at the same result. We need
+                  to understand the systematic behind this observation,
+                  to add it to our machinery.
+              </p>
+              <h3>The Method of Complements</h3>
+              <p>
+                  To make the wrap-around more apparent, We will turn
+                  the line into a circle:
               </p>
               <p>
-                  <img class="diagram" alt="a number circle" src="../images/number-circle.svg"/>
+                  <img class="diagram" alt="a number circle" src="../images/complement-ring.svg"/>
+              </p>              
+              <p>
+                  If you look at our circle above, we see that starting
+                  at 8 and either adding 3 (the grey segment) or
+                  subtracting 7 (the blueish segment) will both arrive
+                  at 1 as its result. Both distances taken together
+                  describe the full circle. This is no coincidence.
               </p>
+              <p>
+                  A full circle in our decimal system has 10 digits. So
+                  if I want to reach the same number moving into either
+                  direction, then the two distances sum up to 10. So I
+                  either go 3 steps into the negative direction, or
+                  10-3=7 into the positive direction. And this is where
+                  the term <i>complement</i> stems from: I take the
+                  complement to 10 to change direction.
+              </p>
+              <p>
+                  This is the basic algorithm then:
+                  <ol type="1">
+                      <li>Check if we are adding or subtracting two numbers</li>
+                      <li>If we add, just input the two numbers and you're done</li>
+                      <li>If we subtract, complement the second operand to 10, then add</li>
+                  </ol>
+              </p>
+              <p>
+                  And here is the adder extended with the <em>complementer</em> showing
+                  a subtraction of <math>8-7=1</math> in action:
+              </p>
+              <p>
+                  <img class="diagram" alt="an adder with a complementer" src="../images/adder-with-complement.svg"/>
+              </p>
+              <p>
+                  In case we built our adder to accomodate for more
+                  digits, let's say 3, then the wrap-around would happen
+                  at 999 and our ring had 1000 representable numbers (0
+                  to 999). Thus, we change direction by taking the
+                  complement with respect to 1000 (10<sup>3</sup>).
+              </p>
+              <p>
+                  Before we can pad ourselves on our shoulder, there is
+                  one thing we need to fix: when we're subtracting, we
+                  deliberately cross nine, which falsly triggers the
+                  overflow signal like in the example above. It shouldn't.
+              </p>
+              <p>
+                  And since we are subtracting, we will eventually run
+                  into underflows, which actually should be singaled, as
+                  in 4-6. If we follow through with our
+                  algorithm above, we complement 6 to 10, yielding 4 and
+                  than add it to the first operand: 4+4=8. The
+                  result has no carry, so no underflow is signalled.
+              </p>
+              <p>
+                  You may have noticed that our adder behaves exactly
+                  oposing to our desired signaling behavior, so
+                  inverting it's behavior will do the trick.
+              </p>
+              <p>
+                  In the below diagrams, I added an inverter to the
+                  overflow signal, which is only active when we're
+                  subtracting. The diagrams show two cases: one with an
+                  underflow and another which stays in range. I'll walk
+                  you through it.
+              </p>
+              <p>
+                  <div class="side-by-side">
+                      <img class="diagram" alt="" src="../images/adder-underflow.svg"/>
+                      <img class="diagram" alt="" src="../images/adder-no-underflow.svg"/>
+                  </div>
+              </p>
+              <p>
+                  The first diagram shows <math>4-6=8</math>, i.e. a
+                  larger number subtractred from a smaller one. The
+                  second operand 6 is complemented to 10 to result in 4
+                  and the addition will have a carry of 0, which will be
+                  inverted to 1, so an underflow is correctly signalled.
+              </p>
+              <p>
+                  The second one shows 8-7=1, i.e. a
+                  smaller number subtracted from a larger one. The
+                  second operand 7 is complemented to 10 to result in 3,
+                  resulting in 11. The carry will be discarded in the
+                  output and inverted for the underflow signal,
+                  resulting in no underflow. Nice!
+              </p>
+              <p>
+                  Addition remains unchanged, as the complementer will
+                  not complement and the over-/underflow signal will not
+                  be inverted. Compare the following two additions, one
+                  triggering an overflow and the other that stays in
+                  range:
+              </p>
+              <p>
+                  <div class="side-by-side">
+                      <img class="diagram" alt="" src="../images/adder-overflow.svg"/>
+                      <img class="diagram" alt="" src="../images/adder-no-overflow.svg"/>
+                  </div>
+              </p>
+              
+              <h3>The Complementer</h3>
+              <p>
+                  We need to talk about the complementer. I admit that I
+                  fooled you a bit: the complementer subtracts the
+                  operand from 10, so we actually need a subtractor!
+                  Sorry I wasn't honest.
+              </p>
+              <p>
+                  But my betrayal wasn't that bad. At least we only need
+                  to subtract from a fixed number, which is 10<sup>n</sup>,
+                  with n being the number of digits. Still, high-school
+                  subtraction will involve borrowing a one from the next
+                  digit, if the digit we are subtracting (the
+                  subtrahend) is bigger than the one being subtracted
+                  from (the minuend).
+              </p>
+              <p>
+                  We can do at least one easier with a trick: if we
+                  don't subtract from 10<sup>n</sup>, but from
+                  10<sup>n</sup>-1 and add the missing one back at the
+                  end, the result will stay the same, but the complement
+                  is taken to a series of nines. No borrows involved
+                  anymore. An example for complementing with 1000:
+              </p>
+              <p>
+                  <center>
+                      1000-1-777+1=333
+                  </center>
+                  is equivalent to
+                  <center>
+                      999-777+1=333
+                  </center>
+              </p>
+              <p>
+                  Now we can at least regard each pair of digits in
+                  isolation and just deal with the problem of
+                  subtracting from 9, as 9 is always larger or equally
+                  large as any other digit we are subtracting from
+                  it. Once we get to binary, this trick will resolve all
+                  our problems, so keep it in mind.
+              </p>
+              <p>
+                  A note on notation that drove me mad. In the
+                  literature I studied, the complement to
+                  10<sup>n</sup> is called the <em>ten's complement</em>. The
+                  complement to ten minus one is called the <em>nines' complement</em>.
+                  It drove me crazy, because the <em>nines' complement</em> is
+                  just a series of nines, but not 9<sup>n</sup>.
+              </p>
+              <p>
+                  What I didn't see for a long time was the position of
+                  the apostrophe. The complement to 10<sup>n</sup> is the
+                  <math>ten's complement</math> (genitive), so the
+                  complement of ten. The <math>nines' complement</math> (plural)
+                  is the complement to a series of nines.
+              </p>
+              <p>
+                  I call that bad word usability.
+              </p>
+              <h3>Signed Numbers</h3>
+              <p>
+                  Our little machine can now subtract positive numbers
+                  by complementing one operand, but we can use the
+                  complement also to represent negative numbers.
+              </p>
+              <p>
+                  Remember our circle from the beginning of this article?
+              </p>
+              <p>
+                  <img class="diagram" alt="a number circle" src="../images/complement-ring.svg"/>                  
+              </p>
+              <p>
+                  We wanted to move from 8 to 1. Not being able to move
+                  7 steps into the negative direction, we moved 3 into
+                  the positive, because its effect was the same.
+              </p>
+              <p>
+                  So the numbers -7 and 3 behave the same under
+                  addition. As do all the others when complemented to
+                  10. So we might as well regard each number as its
+                  negative complemented partner:
+              </p>
+              <p>
+                  <img class="diagram" alt="number circle with respective negative numbers" src="../images/number-circle-10-complement.svg"/>
+              </p>
+              <p>
+                  An explanation of why this works and why I sneakily left
+                  out the complement to zero is in order.
+              </p>
+              <p>
+                  Firstly, the ten's complement (mind the genivite ;-)
+                  of zero is 10. As we only keep one digit it will fall
+                  back to zero. This is deemed as one of the advantages
+                  of this method: 0 and -0 have the same
+                  representation. No wasted digits.
+              </p>
+              <p>
+                  Secondly, let's take another look at our
+                  adder/subtractor machinery, which we painstainkingly
+                  designed until now and see how it subtracts the
+                  positive numbers 3 from 4:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/adder-no-underflow.svg"/>
+              </p>
+              <p>
+                  Remember? We assert the subtraction signal to
+                  complement the 3, so instead of going back 3 steps in
+                  our number circle, we go forward 7 steps, arriving at
+                  1. It wouldn't be any different, if we input 7
+                  directly and didn't assert the subtraction signal:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/adder-signed.svg"/>
+              </p>
+              <p>
+                  So in short: 4-3 is the same as 4+7. I hope it makes
+                  sense now that we could also say: 4-3 is the same as
+                  4+(-3), reinterpreting the 7 as (-3). Only that pesky
+                  over-/underflow signal is acting up again. We'll fix
+                  that in a second.
+              </p>
+              <p>
+                  We gained the power of expressing negative numbers. In
+                  fact, we can just choose any number of digits to be
+                  their negative counterparts. Let's pick the digits 4
+                  to 9 to actually mean -6 to -1. I purposely picked an
+                  uneven number of digits to be interpreted as negative,
+                  because most literature will tell you to cut the set
+                  of digits in half and interpret one half to be
+                  negative. This approach has benefits in binary as we
+                  will see, but it is by no means mandatory to get the
+                  complement method to work:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/number-circle-10-signed.svg"/>
+              </p>
+              <p>
+                  Let's test this new interpretation for a subtraction
+                  that stays in range: 1+(-4)=-3. So the first operand
+                  is 1, the second is the ten's complement to 4, which
+                  is 6. But we won't use our complementer, but input the
+                  6 ourselves and we don't assert the subtraction
+                  signal, as we are adding a negative number:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/adder-signed-negative-result.svg"/>
+              </p>
+              <p>
+                  Effectively we move 6 steps into the positive
+                  direction, which is the same as moving 4 steps into
+                  the negative direction. The result is 7. Looking at
+                  our number circle above, 7 is interpreted as -3, so
+                  1+(-4)=-3. Bingo.
+              </p>
+              <p>
+                  As promised, we need to fix our over-/underflow
+                  signal, because the machinery will still signal an
+                  overflow for crossing the 0 from the negative
+                  direction, e.g. for -2+3=1 (where instead of -2 we
+                  would use 8).
+              </p>
+              <p>
+                  It turns out that there is no elegant solution in our
+                  decimal system. We would really have to look at it case by case:
+              </p>
+              <p>
+                  <ol>
+                      <li>                      
+                          <b>A positive number added to a positive number:</b>
+                          If we started at 0, 1, 2 or 3 and added a positive
+                          number, but ended up at 4 (-6), 5 (-5) ..., then we
+                          overflowed
+                      </li>
+
+                      <li>
+                          <b>A negative number added to a negative number:</b>
+                          If we started at one of the negative numbers
+                          and added a negative number or subtracted a
+                          positive one, but ended up positive, we
+                          underflowed
+                      </li>
+                      <li>
+                          <b>A negative number added to a positive or vice versa:</b>
+                          This combination can never over- or
+                          underflow. Just check out the number circle
+                          and try it.
+                      </li>
+                  </ol>                      
+              </p>
+              <p>
+                  I know that it is hard to imagine how to put this
+                  logic into our machinery, but as with our complementer
+                  I have to ask for your patience, because in binary it
+                  will be trivial to implement.
+              </p>
+              <h3>What we've learned so far</h3>
+              <p>
+                  The good news is that you now know every trick there
+                  is to know to understand why the complement method
+                  works. In the remainder of this article we will merely
+                  transfer this knowledge to the binary system. We will
+                  do this by first generalizing to arbitrary number
+                  bases and then go to binary. But first we sum up what
+                  we now know:
+              </p>
+              <p>
+                  <ul>
+                      <li>
+                          The fixed width digits make the adder wrap-around
+                      </li>
+                      <li>
+                          Thus instead of subtracting, we can add the complement to come around from the other side
+                      </li>
+                      <li>
+                          When we subtract, we deliberately overflow, so we invert the overflow signal
+                      </li>
+                      <li>
+                          The complementer is still subtraction, but a bit easier when we subtract from 10<sup>n</sup>-1. Will become trivial in binary
+                      </li>
+                      <li>
+                          We can input the complement of numbers
+                          directly, interpreting the complements as
+                          negative numbers, e.g. 1+(-3)
+                      </li>
+                      <li>
+                          The over- and underflow need to be checked with a weird if/else statement, which again becomes trivial in binary
+                      </li>
+                  </ul>
+              </p>
+              <p>
+                  Ok, now for some math to generalize this knowledge to arbitary bases.
+              </p>
+              <h3>The (diminished) Radix Complement</h3>
+              <p>
+                  As you may know, 10 is the radix of our decimal
+                  system, which means we have 10 uniqe digits. The
+                  complement method works with any radix of any number
+                  system, giving this method it's name <em>the radix complement</em>.
+              </p>
+              <p>
+                  In general we can formalize the radix complement as
+                  follows :
+              </p>
+              <p>
+                  <center>
+                      a<sub>c</sub> = b<sup>n</sup>-a,
+                  </center>
+              </p>
+              <p>
+                  where a<sub>c</sub> is the complement to a, b is the
+                  radix or base of the number system and n is the number
+                  of digits to which we constrain our machinery to.
+              </p>
+              <p>
+                  We also need the complement to the radix minus one,
+                  which is called the <em> dimminished radix complement </em>:
+              </p>
+              <p>
+                  <center>
+                      a<sub>dc</sub> = b<sup>n</sup>-1-a,
+                  </center>                      
+              </p>
+              <p>
+                  where a<sub>dc</sub> is the dimminished radix
+                  complement to a, while the rest has the same
+                  definition as above. And from the formulas above it is
+                  easy to see that the radix complement equals the
+                  diminished radix complement plus one.
+              </p>
+              <p>
+                  One property that also translates to the generalized
+                  case is that the number we subtract from in the
+                  diminished radix complement is always a series of the
+                  digit with the highest value in the number system at
+                  hand, e.g. 999 in decimal or 444 in quinary or 111 in
+                  binary.
+              </p>
+              <p>
+                  Let's translate this knowledge to the <i>quinary system</i>,
+                  which has base 5. A quick recap on numbering systems:
+                  if we have n digits to our disposal, we count up until
+                  we run out of digits, after which we will add a carry
+                  to the next position and start from zero again. The
+                  quinary system on a number line thus looks like this:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/quinary-number-line.svg"/>
+              </p>
+              <p>
+                  where 10 is not the number of fingers on our hands,
+                  but the number of stars a very good hotel has. We
+                  just don't have this nice symbol 5 in our quinary
+                  system to express it, so we're using a combination of
+                  the symbols we have to our disposal.
+              </p>
+              <p>
+                  The diagram below shows the number circle for one quinary digit:
+              </p>
+              <p>
+                  <img class="diagram" alt="a number circle for the quinary system" src="../images/complement-ring-5.svg"/>
+              </p>
+              <p>
+                  If we take the example of 2-1=1 and consider our
+                  formula above, we can achieve the same result by
+                  taking the five's complement of 1, which is 4. It
+                  follows that 2+4=11 (look at our number line above, if
+                  you don't belive me). Now we discard the second 1 and
+                  arrive at the correct result of 1. We just exercised
+                  2+(-1)=1 in quinary.
+              </p>
+              <p>
+                  The complement method works. What about the overflow
+                  suppression? Nothing special in quinary, just invert
+                  the carry again, if we are subtracting.
+              </p>
+              <p>
+                  What about signed numbers? Still works! Let's do a
+                  quick reinterpretation:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/number-circle-5-signed.svg"/>
+              </p>
+              <p>
+                  and test it against 1+(-2). -2 becomes 5-2=3, so
+                  instead of going two steps negative, we go 3 steps
+                  positive and arrive at 4, which we interpret as
+                  -1. 1+(-2)=-1 checks out.
+              </p>
+              <p>
+                  Also in quinary we need subtraction for our
+                  complementer module. And also here we can avoid
+                  borrows and at least concern ourselves with each digit
+                  in isolation, if we complement to the dimished radix,
+                  which is 5-1=4 or 5<sup>3</sup>-1=444, when dealing
+                  with three digits.
+              </p>
+              <p>
+                  As I said, the dimished radix is always a series of
+                  digits with the highest value. Think about it: in any
+                  number system, the base itself is always a 1 followed
+                  by zeros (like 5 on the number line above is written
+                  as 10). 6 in the senary number system (base 6) is also
+                  10. So it should be clear that if we subtract one from
+                  10 or 100 or 1000 etc. that the result will be a
+                  series of the digits with the highest value (100-1=99
+                  in decimal, 100-1=44 in quinary etc.).
+              </p>
+              <p>
+                  And like in the decimal case with signed numbers, we
+                  don't care about crossing zero anymore when trying to
+                  detect over- and underflows. Also in quinary, the
+                  logic is still weird. We need to check all cases. As
+                  promised, this will resolve in binary.
+              </p>
+              <p>
+                  Finally we can go to binary and the two's complement,
+                  which should be a piece of cake as we already know
+                  everything there is to know and the two remaining
+                  mysteries (complementer and over-/underflow detection)
+                  will take care of itself in binary.
+              </p>
+              <h3>The Two's Complement</h3>
+              <p>
+                  We seem to have established a certain procedure, so
+                  let's stick to it. First the binary system on a number
+                  line, but instead of allowing only one digit, we exand
+                  to three. Otherwise we'd already wrap-around after two
+                  digits, which looks stupid:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/binary-number-line.svg"/>
+              </p>
+              <p>
+                  Again, we can display the line as a circle to make the
+                  wrap-around more obvious:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/number-circle-binary.svg"/>
+              </p>
+              <p>
+                 By now, we are experts in changing direction to express
+                 subtraction as addition. And we also can use fancy
+                 mathematical terms for this act: if we want to execute
+                 the subtraction 011-010=001, we turn it into 011+(-010)
+                 by taking the radix complement in binary, i.e. the
+                 two's complement, from 010:
+              </p>
+              <p>
+                  <center>
+                      2<sup>3</sup>-010
+                  </center>
+                  expressed in the binary system will become
+                  <center>
+                      10 <sup>3</sup>-010
+                  </center>
+                  is equivalent to
+                  <center>
+                      1000-010=110
+                  </center>
+              </p>
+              <p>
+                  This results in 011+110=1001. Cross out the leading one
+                  because of our constraint to only support three digits
+                  and we see that it works.
+              </p>
+              <p>
+                  I promised that complementing in binary will become
+                  trivial to implement in hardware, so here it goes: I
+                  asked you to remember the diminished radix complement,
+                  which was
+              </p>
+              <p>
+                  <center>
+                      a<sub>c</sub>=b<sup>n</sup>-1-a,
+                  </center>
+              </p>
+              <p>
+                  which will always lead to a series of the numeral with
+                  the highest value in the respective number system. So
+                  in binary for three digits, the diminished radix
+                  complement looks as follows:
+              </p>
+              <p>
+                  <center>
+                      a<sub>c</sub>=10<sup>3</sup>-1-a,
+                  </center>
+                  which is equivalent to
+                  <center>
+                      a<sub>c</sub>=1000-1-a,
+                  </center>
+                  which is equivalent to
+                  <center>
+                      a<sub>c</sub>=111-a.
+                  </center>
+              </p>
+              <p>
+                  So in binary the dimished radix complement is taken
+                  with respect to a series of ones and thus called the
+                  ones' complement (mind the stupid apostrophe).
+              </p>
+              <p>
+                  Subtracting any binary number from a series of ones is
+                  just flipping all the bits from the subtrahend,
+                  e.g. 111-010=101 or 111-001=110. It shouldn't be too
+                  hard to imagine that it is easy to implement a
+                  bit-flipper in hardware. For those who forgot their
+                  digital logic class, it's the behavior of a XOR gate,
+                  when one input is asserted.
+              </p>
+              <p>
+                  There you go! To change directions in the number
+                  circle, we take the two's complement, which is easily
+                  done by first taking the ones' complement (flipping
+                  all the bits) and then adding the one back. The adder
+                  now looks as follows:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/adder-binary-complement.svg"/>
+              </p>
+              <p>
+                  That's it for unsigned numbers. We also already
+                  suppressed the overflow signal, when deliberately
+                  crossing zero on subtraction.
+              </p>
+              <p>
+                  The last and final step is to reinterpret a set of
+                  binary numbers as being negative numbers. But before
+                  we write the negative numbers to the circle, let's
+                  take another look at the unmodified circle with
+                  unsigned numbers:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/number-circle-binary.svg"/>
+              </p>
+              <p>
+                  Remember the second problem I promised would dissolve
+                  in binary? When reinterpreting a set of numbers as
+                  negative, we had this weird logic to check if we went
+                  from positive to negative numbers etc. That logic was
+                  weird, because it was not obvious how to detect if we
+                  passed our imaginary over- or underflow threshold.
+              </p>
+              <p>
+                  But in binary, as you can verify above, this becomes
+                  easy if we interpret all numbers with a leading one as
+                  negative and those with a leading zero as
+                  positive. Then we can use the leading bit to check, if
+                  two positive numbers were added and resulted in a
+                  negative.
+              </p>
+              <p>
+                  Ok, remember we will now reinterpret all values with a
+                  leading one to a negative number, but it is just
+                  reinterpretation, so the actual values that go into
+                  the adder as operands are the ones from the above
+                  circle. Here we go:
+              </p>
+              <p>
+                  <img class="diagram" alt="" src="../images/number-circle-signed-binary.svg"/>
+              </p>
+              <p>
+                  Now the over-/underflow happens when stepping from 011
+                  to 100 (-100) or from 100 (-100) to 011. Let's
+                  reiterate our conditions for over-/underflow
+                  detection:
+              </p>
+              <p>
+                  <ol>
+                      <li>                      
+                          <b>A positive number added to a positive number:</b>
+                          if the leading bits of both operands are zero
+                          and the result it one, then we
+                          overflowed. This is easy to implement as a
+                          logic expression and thus as a logic circuit.
+                      </li>
+                      <li>
+                          <b>A negative number added to a negative number:</b>
+                          If both leading bits are one and the leading
+                          bit of the result is zero, we underflowed.
+                      </li>
+                      <li>
+                          <b>A negative number added to a positive or vice versa:</b>
+                          This combination can never over- or
+                          underflow. Just check out the number circle
+                          and try it.
+                      </li>
+                  </ol>                                        
+              </p>
+              <p>
+                  And we're done. I never thought that such an everyday
+                  seemingly simple concept would take me so long to
+                  write about. This was really a surprise, but I am
+                  happy I made it this far.
+              </p>
+              <p>
+                  Thanks for reading! Feedback is welcome at
+                  <address>
+                      pedram.hadjian@gmail.com
+                  </address>
+              </p>              
+      <footer>
+      </footer>              
     </body>
 </html>
